@@ -16,11 +16,17 @@ class SaleList(Resource):
     @classmethod
     def get(cls):
         """Fetch all sales recorded."""
-        return SALES
+        if SALES == []:
+            return {"message": "Sorry you have not added any sale records"}, 200
+        elif SALES:
+            return {'SALES': SALES}
 
     @classmethod
     def post(cls):
         """Create a sale order."""
+        if not request.json:
+            return 400
+
         sale_order = {
             'id': request.json['id'],
             'name': request.json['name'],
@@ -28,7 +34,7 @@ class SaleList(Resource):
             'price': request.json['price']
         }
         SALES.append(sale_order)
-        return {'SALES': SALES}, 200
+        return {'SALES': SALES}, 201
 
 
 # GET request by Id
@@ -49,6 +55,8 @@ class ProductList(Resource):
     @classmethod
     def get(cls):
         """Fetch all products."""
+        if PRODUCTS == []:
+            return {"message": "Sorry you have not added any products yet"}
         return PRODUCTS
 
     @classmethod
