@@ -1,5 +1,5 @@
 # local imports
-from app.v1.views import ProductList, SaleList, SaleRecord
+from app.v1.views import OneProduct, ProductList, SaleList, SaleRecord
 
 from flask import Flask
 
@@ -20,3 +20,4 @@ api.add_resource(ProductList, '/v1/products')
 
 if __name__ == '__main__':  # This will start a development server
     app.run(debug=True)
+
