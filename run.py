@@ -1,3 +1,6 @@
+from flask import Flask
+from flask_restful import Resource, Api
+
 # local imports
 from app.v1.views import OneProduct, ProductList, SaleList, SaleRecord
 
