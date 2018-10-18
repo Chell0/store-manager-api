@@ -1,11 +1,15 @@
 # Here we have all the endpoints
-from flask import Flask, jsonify, request
+from flask import request
+
 from flask_restful import Resource
 
 sales = []
+products = []
 
 
-class SaleList(Resource):  
+# Get all and POST request
+class SaleList(Resource):
+
     def get(self):
         """Fetch all sales recorded"""
         return sales
@@ -20,3 +24,20 @@ class SaleList(Resource):
         }
         sales.append(sale_order)
         return {'sales': sales}, 200
+
+
+# GET request by Id
+class SaleRecord(Resource):
+
+    def get(self, id):
+        """Fetch for a single sale order"""
+        sales_order = [sale for sale in sales if sale['id'] == id]
+        return {'sale': sales_order[0]}
+
+
+# Get all and POST request
+class ProductList(Resource):
+
+    def get(self):
+        """Fetch all products"""
+        return products
