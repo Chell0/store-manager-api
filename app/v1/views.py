@@ -41,4 +41,3 @@ class ProductList(Resource):
     def get(self):
         """Fetch all products"""
         return products
-

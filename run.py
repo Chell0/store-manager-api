@@ -11,7 +11,6 @@ app = Flask(__name__)  # This will create a Flask wsgi application
 
 api = Api(app)  # This will create a Flask-RESTful API
 
-
 # This will process a GET all and POST request
 api.add_resource(SaleList, '/v1/sales')
 # This will process a GET by Id request
