@@ -42,22 +42,3 @@ class ProductList(Resource):
         """Fetch all products"""
         return products
 
-    def post(self):
-        """Create a product"""
-        add_product = {
-            'id': request.json['id'],
-            'name': request.json['name'],
-            'stock': request.json['stock'],
-            'price': request.json['price']
-        }
-        products.append(add_product)
-        return {'products': products}, 200
-
-
-# GET request by Id
-class OneProduct(Resource):
-
-    def get(self, id):
-        """Fetch for a single product"""
-        get_one = [product for product in products if product['id'] == id]
-        return {'product': get_one[0]}

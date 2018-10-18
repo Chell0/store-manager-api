@@ -16,9 +16,8 @@ api.add_resource(SaleList, '/v1/sales')
 api.add_resource(SaleRecord, '/v1/sales/<int:id>')
 # This will process a GET all and POST request
 api.add_resource(ProductList, '/v1/products')
-# This will process a GET by Id request
-api.add_resource(OneProduct, '/v1/products/<int:id>')
 
 
 if __name__ == '__main__':  # This will start a development server
     app.run(debug=True)
+
