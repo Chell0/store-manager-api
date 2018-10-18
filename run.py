@@ -1,5 +1,6 @@
 # local imports
-from app.v1.views import ProductList, SaleList, SaleRecord
+from app.v1.views import OneProduct, ProductList, SaleList, SaleRecord
+
 
 from flask import Flask
 

@@ -41,14 +41,3 @@ class ProductList(Resource):
     def get(self):
         """Fetch all products"""
         return products
-
-    def post(self):
-        """Create a product"""
-        add_product = {
-            'id': request.json['id'],
-            'name': request.json['name'],
-            'stock': request.json['stock'],
-            'price': request.json['price']
-        }
-        products.append(add_product)
-        return {'products': products}, 200
