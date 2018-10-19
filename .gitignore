@@ -2,3 +2,7 @@ venv/
 .vscode/
 __pycache__/
 *.pyc
+TODO.md
+.coverage
+.mypy_cache/
+.pytest_cache

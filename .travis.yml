@@ -1,0 +1,16 @@
+landguage: python
+  
+python:
+  - "3.6"
+
+cache: pip
+
+install:
+  - pip install --upgrade pip
+  - pip install -r requirements
+
+script: 
+  - nosetests --with-coverage --cover-package=api
+
+after_success:
+  - coveralls
