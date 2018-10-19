@@ -1,11 +1,10 @@
 """Here we have all the endpoints."""
 from flask import request
-
 from flask_restful import Resource
+from flask_jwt import jwt_required
 
 
 SALES = []
-
 PRODUCTS = []
 
 
@@ -13,11 +12,12 @@ PRODUCTS = []
 class SaleList(Resource):
     """Parent class."""
 
+    @jwt_required()
     @classmethod
     def get(cls):
         """Fetch all sales recorded."""
         if SALES == []:
-            return {"message": "Sorry you have not added any sale records"}, 200
+            return {"message": "Sorry you have not added any sale records"}
         elif SALES:
             return {'SALES': SALES}
 
@@ -44,8 +44,8 @@ class SaleRecord(Resource):
     @classmethod
     def get(cls, id):
         """Fetch for a single sale order."""
-        sales_order = [sale for sale in SALES if sale['id'] == id]
-        return {'sale': sales_order[0]}
+        gso = next(filter(lambda x: x['id'] == id, SALES), "Add a sale order")
+        return {'gso': gso}, 200 if gso is not "Add a sale order" else 404
 
 
 # Get all and POST request
@@ -79,5 +79,5 @@ class OneProduct(Resource):
     @classmethod
     def get(cls, id):
         """Fetch for a single product."""
-        getone = [product for product in PRODUCTS if product['id'] == id]
-        return {'product': getone[0]}
+        gbi = next(filter(lambda x: x['id'] == id, PRODUCTS), "Add a product")
+        return {'gbi': gbi}, 200 if gbi is not "Add a product" else 404
