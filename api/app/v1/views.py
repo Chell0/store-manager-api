@@ -1,7 +1,7 @@
 """Here we have all the endpoints."""
 from flask import request
 from flask_restful import Resource
-from flask_jwt import jwt_required
+# from flask_jwt import jwt_required
 
 
 SALES = []
@@ -12,7 +12,7 @@ PRODUCTS = []
 class SaleList(Resource):
     """Parent class."""
 
-    @jwt_required()
+    # @jwt_required()
     @classmethod
     def get(cls):
         """Fetch all sales recorded."""
