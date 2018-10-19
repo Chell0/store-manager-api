@@ -1,18 +1,16 @@
 """Here we have all the endpoints."""
 from flask import request
 from flask_restful import Resource
-from flask_jwt import jwt_required
-
+# from flask_jwt import jwt_required
 
 SALES = []
 PRODUCTS = []
-
 
 # Get all and POST request
 class SaleList(Resource):
     """Parent class."""
 
-    @jwt_required()
+    # @jwt_required()
     @classmethod
     def get(cls):
         """Fetch all sales recorded."""
@@ -69,7 +67,7 @@ class ProductList(Resource):
             'price': request.json['price']
         }
         PRODUCTS.append(add_product)
-        return {'products': PRODUCTS}, 200
+        return {'status':"success", 'products': PRODUCTS}, 201
 
 
 # GET request by Id
