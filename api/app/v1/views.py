@@ -3,8 +3,8 @@ from flask import request
 from flask_restful import Resource
 # from flask_jwt import jwt_required
 
-SALES = []
-PRODUCTS = []
+sales = []
+products = []
 
 # Get all and POST request
 class SaleList(Resource):
@@ -14,10 +14,10 @@ class SaleList(Resource):
     @classmethod
     def get(cls):
         """Fetch all sales recorded."""
-        if SALES == []:
+        if sales == []:
             return {"message": "Sorry you have not added any sale records"}
-        elif SALES:
-            return {'SALES': SALES}
+        elif sales:
+            return {'sales': sales}
 
     @classmethod
     def post(cls):
@@ -31,8 +31,8 @@ class SaleList(Resource):
             'quantity': request.json['quantity'],
             'price': request.json['price']
         }
-        SALES.append(sale_order)
-        return {'SALES': SALES}, 201
+        sales.append(sale_order)
+        return {'sales': sales}, 201
 
 
 # GET request by Id
@@ -42,8 +42,8 @@ class SaleRecord(Resource):
     @classmethod
     def get(cls, id):
         """Fetch for a single sale order."""
-        gso = next(filter(lambda x: x['id'] == id, SALES), "Add a sale order")
-        return {'gso': gso}, 200 if gso is not "Add a sale order" else 404
+        sale_by_id = next(filter(lambda x: x['id'] == id, sales), "Add a sale order")
+        return {'sale_by_id': sale_by_id}, 200 if sale_by_id is not "Add a sale order" else 404
 
 
 # Get all and POST request
@@ -53,9 +53,9 @@ class ProductList(Resource):
     @classmethod
     def get(cls):
         """Fetch all products."""
-        if PRODUCTS == []:
+        if products == []:
             return {"message": "Sorry you have not added any products yet"}
-        return PRODUCTS
+        return products
 
     @classmethod
     def post(cls):
@@ -66,8 +66,8 @@ class ProductList(Resource):
             'stock': request.json['stock'],
             'price': request.json['price']
         }
-        PRODUCTS.append(add_product)
-        return {'status':"success", 'products': PRODUCTS}, 201
+        products.append(add_product)
+        return {'status':"success", 'products': products}, 201
 
 
 # GET request by Id
@@ -77,5 +77,5 @@ class OneProduct(Resource):
     @classmethod
     def get(cls, id):
         """Fetch for a single product."""
-        gbi = next(filter(lambda x: x['id'] == id, PRODUCTS), "Add a product")
-        return {'gbi': gbi}, 200 if gbi is not "Add a product" else 404
+        get_by_id = next(filter(lambda x: x['id'] == id, products), "Add a product")
+        return {'get_by_id': get_by_id}, 200 if get_by_id is not "Add a product" else 404
