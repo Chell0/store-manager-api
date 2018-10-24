@@ -19,6 +19,7 @@ class Testing(Config):
     """Testing configuration with a test database."""
     TESTING = True
     DATABASE_URI = 'postgresql://localhost/test_db'
+    DEBUG = True 
 
 
 class Production(Config):
