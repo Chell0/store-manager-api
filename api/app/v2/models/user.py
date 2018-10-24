@@ -1,5 +1,4 @@
-from marshmallow import fields, Schema
-from db import db
+from api.app.v2.db import db
 
 # Users Model
 class UserModel(db.Model):
@@ -8,16 +7,16 @@ class UserModel(db.Model):
     __table__ = 'users'
 
     # These are compulsory fields
-    user_id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String(150), nullable=False)
-    user_email = db.Column(db.String(150), unique=True,  nullable=False)
-    user_password = db.Column(db.String(150), nullable=True)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(150), nullable=False)
+    email = db.Column(db.String(150), unique=True,  nullable=False)
+    password = db.Column(db.String(150), nullable=True)
 
-    def __init__(self, data):
-        """initialize with name."""
-        self.name = data.get('name')
-        self.email = data.get('email')
-        self.password = data.get('password')
+    def __init__(self, name, email, password):
+        """initialize with above."""
+        self.name = 'name'
+        self.email = 'email'
+        self.password = 'password'
 
     # save users to db
     def save(self):
@@ -33,6 +32,3 @@ class UserModel(db.Model):
     @staticmethod
     def get_a_single_user():
         return UserModel.query.get(id)
-
-    def __repr__(self):
-        return "<name {}>".format(self.name)
