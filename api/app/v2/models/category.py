@@ -24,5 +24,5 @@ class CategoryModel(db.Model):
 
     # get a single category
     @staticmethod
-    def get_one_category(name):
+    def get_category_by_name(name):
         return CategoryModel.query.get(name)
