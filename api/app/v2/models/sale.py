@@ -1,4 +1,4 @@
-from api.app.v2.db import db
+from .db import db
 
 # Sales  Model
 class SalesModel(db.Model):

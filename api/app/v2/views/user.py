@@ -2,7 +2,6 @@ import psycopg2
 
 from  flask_restful import Resource, reqparse
 
-from db import db
 from api.app.v2.models.user import UserModel
 
 

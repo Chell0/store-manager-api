@@ -6,19 +6,19 @@ class Config:
     DEBUG = False
     CSRF_ENABLED = True
     SECRET = os.getenv('SECRET')
-    DATABASE_URI = os.getenv('DATABASE_URL')
 
 
 class Development(Config):
     """Development configuration."""
     DEBUG = True
     TESTING = False
+    DATABASE_URI = os.getenv('DATABASE_URL')
 
 
 class Testing(Config):
     """Testing configuration with a test database."""
     TESTING = True
-    DATABASE_URI = 'postgresql://localhost/test_db'
+    DATABASE_URI = os.getenv('DATABASE_URL_TEST')
     DEBUG = True 
 
 
