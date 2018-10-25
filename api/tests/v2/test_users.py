@@ -30,7 +30,7 @@ class TestUsers(BaseTest):
             data=json.dumps(self.user)
         )
         self.assertEqual(response.status_code, 201)
-        response = self.client.post(
+        response = self.client().post(
             '/v2/auth/login',
             headers={'Content-Type': 'application/json'},
             data=json.dumps(self.user)
