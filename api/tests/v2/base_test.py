@@ -2,6 +2,7 @@
 import unittest
 
 from api import app_create
+from db import db
 
 
 class BaseTest(unittest.TestCase):
