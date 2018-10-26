@@ -19,7 +19,7 @@ class Testing(Config):
     """Testing configuration with a test database."""
     TESTING = True
     DATABASE_URI = os.getenv('DATABASE_URL_TEST')
-    DEBUG = True 
+    DEBUG = True
 
 
 class Production(Config):

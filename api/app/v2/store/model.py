@@ -9,6 +9,9 @@ class StoreModel(StoreDb):
 ################# CATEGORY SECTION ####################
 
     # Add a category
+    store = StoreModel()
+    store.product_add()
+
     def add_category(self, data):
         """Add a category."""
         self.cursor.execute(
@@ -18,7 +21,7 @@ class StoreModel(StoreDb):
             """
             % (data['category_id'], data['category_name'])
         )
-        self.store()
+        # self.store(....)
         return data
 
     # Fetch all categories
@@ -65,6 +68,8 @@ class StoreModel(StoreDb):
             % (data['product_name'], data['stock'], data['price'], data['category_name'])
         )
         self.store()
+
+        # self.connection.commit()
         return data
 
     # Fetch all products
