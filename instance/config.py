@@ -6,20 +6,20 @@ class Config:
     DEBUG = False
     CSRF_ENABLED = True
     SECRET = os.getenv('SECRET')
+    DATABASE_URI = os.getenv('DATABASE_URL')
 
 
 class Development(Config):
     """Development configuration."""
     DEBUG = True
     TESTING = False
-    DATABASE_URI = os.getenv('DATABASE_URL')
 
 
 class Testing(Config):
     """Testing configuration with a test database."""
     TESTING = True
-    DATABASE_URI = os.getenv('DATABASE_URL_TEST')
     DEBUG = True
+    DATABASE_URI = os.getenv('DATABASE_URL_TEST')
 
 
 class Production(Config):
@@ -29,7 +29,7 @@ class Production(Config):
 
 
 app_settings = {
-    'production': Production,
     'development': Development,
-    'testing': Testing
+    'testing': Testing,
+    'production': Production
 }
