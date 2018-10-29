@@ -1,16 +1,19 @@
 # Local imports
-from api.app.v2.db import StoreDb
+# from api.app.v2.db import StoreDb
+import os
+import psycopg2
 
 from werkzeug.exceptions import NotFound, BadRequest
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-class Authentication(StoreDb):
+class Authentication():
     """Authentication class."""
 
     def __init__(self):
         """Initializing constructor."""
-        pass
+        self.connection = psycopg2.connect(os.getenv("DATABASE_URL"))
+        self.cursor = self.connection.cursor()
 
     def create_user(self, data):
         """Create a user."""
@@ -21,20 +24,20 @@ class Authentication(StoreDb):
             """
             % (data['user_name'], data['email'], data['password'], data['is_admin'])
         )
-        user_id = self.cursor.fetchone()[0]
+        user_id = self.cursor.fetchone()
         self.connection.commit()
         return user_id
 
     def fetch_email(self, data):
         """Login user."""
         self.cursor.execute("SELECT * FROM users WHERE email='%s'"
-            % ('email')
+            % (data['email'])
         )
-        result = self.cursor.fetchone()[0]
+        result = self.cursor.fetchone()
         if not result:
-            raise NotFound("Email was not found")
+            return ({"status": "Email was not found"}), 404
         if result[3] == data['password']:
-            return data
+            return result[0]
         else:
             raise BadRequest("Password does not match")
 

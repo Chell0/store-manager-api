@@ -1,4 +1,5 @@
 from flask_restful import Resource, reqparse
+from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 
 # local imports
 from api.app.v2.security.validate import Validate
@@ -31,6 +32,11 @@ class UserRegistration(Resource):
 		email = validate.validate_email(args['email'])
 		password = validate.validate_password(args['password'])
 		user = usr.fetch_email(email)
+		return (
+			{
+			"status": "success",
+			"messages": "User sucessfully created!"
+			}), 201
 
 
 class UserLogin(Resource):
@@ -48,8 +54,17 @@ class UserLogin(Resource):
 			help="Password cannot be left blank!"
 		)
 		args=parser.parse_args()
-		email = validate.validate_email(args['email'])
-		password = validate.validate_password(args['password'])
+		email = args['email']
+		password = args['password']
+		user = usr.fetch_email(email)
+		if password == user[3]:
+			details = [user[0], user[4]]
+			access_token = create_access_token(identity = details)
+			return access_token
+		return {
+			"message": "Error password does not match"
+		}, 400
+
 
 
 class CreateAttendantAccount(Resource):

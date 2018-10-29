@@ -7,7 +7,7 @@ class Validate:
 
 	def validate_email(self, email):
 		"""Validate the email address."""
-		if not re.match(r"^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})", email):
+		if not re.match(r"^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", email):
 			raise BadRequest("This is not a valid email address")
 		return email
 
