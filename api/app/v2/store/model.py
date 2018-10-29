@@ -9,9 +9,6 @@ class StoreModel(StoreDb):
 ################# CATEGORY SECTION ####################
 
     # Add a category
-    store = StoreModel()
-    store.product_add()
-
     def add_category(self, data):
         """Add a category."""
         self.cursor.execute(
@@ -21,23 +18,21 @@ class StoreModel(StoreDb):
             """
             % (data['category_id'], data['category_name'])
         )
-        # self.store(....)
+        self.store()
         return data
 
     # Fetch all categories
     def get_all_categories(self):
         """Fetch all categories."""
-        self.cursor.execute("SELECT * FROM category")
+        self.cursor.execute("SELECT * FROM category"
+        )
         result = self.cursor.fetchall()
         return result
 
     # Fetch one category
     def get_one_category(self, id):
         """Fetch a product by id from the db."""
-        self.cursor.execute(
-            """
-            SELECT * FROM sales WHERE category_id='%s'
-            """
+        self.cursor.execute("SELECT * FROM sales WHERE category_id='%s'"
             % (id)
         )
         category = self.cursor.fetchone()
@@ -82,10 +77,7 @@ class StoreModel(StoreDb):
     # Fetch one product
     def get_one_product(self, id):
         """Fetch a product by id from the db."""
-        self.cursor.execute(
-            """
-            SELECT * FROM products WHERE product_id='%s'
-            """
+        self.cursor.execute("SELECT * FROM products WHERE product_id='%s'"
             % (id)
         )
         product = self.cursor.fetchone()
@@ -124,26 +116,23 @@ class StoreModel(StoreDb):
             INSERT INTO sales (sale_id, product_name, quantity, price, user_id)
             VALUES ('%s', '%s', '%s', '%s', '%s')
             """
-            % (data['sale_id'], data['product_name'], data['quantity'], data['price']), data['user_id'])
+            % (data['sale_id'], data['product_name'], data['quantity'], data['price'], data['user_id'])
         )
-            self.store()
-            return data
+        self.store()
+        return data
 
-            # Fetch all sales
-            def get_all_sales(self):
-            """Fetch all sales."""
-            self.cursor.execute("SELECT * FROM sales")
-            result=self.cursor.fetchall()
-            return result
+    # Fetch all sales
+    def get_all_sales(self):
+        """Fetch all sales."""
+        self.cursor.execute("SELECT * FROM sales")
+        result=self.cursor.fetchall()
+        return result
 
-            # Fetch a sale order
-            def get_a_sale_order(self, id):
-            """Fetch a sale order by id."""
-            self.cursor.execute(
-        """
-            SELECT * FROM sales WHERE sale_id='%s'
-            """
-        % (id)
+    # Fetch a sale order
+    def get_a_sale_order(self, id):
+        """Fetch a sale order by id."""
+        self.cursor.execute("SELECT * FROM sales WHERE sale_id='%s'"
+            % (id)
         )
-            sale=self.cursor.fetchone()
-            return sale
+        sale=self.cursor.fetchone()[0]
+        return sale
