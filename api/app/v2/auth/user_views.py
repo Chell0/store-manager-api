@@ -29,8 +29,8 @@ class UserRegistration(Resource):
 			help="Password cannot be left blank!"
 		)
 		args = parser.parse_args()
-		email = validate.validate_email(args['email'])
-		password = validate.validate_password(args['password'])
+		email = args['email']
+		password = args['password']
 		user = usr.fetch_email(email)
 		return (
 			{
@@ -57,6 +57,7 @@ class UserLogin(Resource):
 		email = args['email']
 		password = args['password']
 		user = usr.fetch_email(email)
+		print(user)
 		if password == user[3]:
 			details = [user[0], user[4]]
 			access_token = create_access_token(identity = details)
@@ -88,8 +89,9 @@ class CreateAttendantAccount(Resource):
 			help="Password cannot be left blank!"
 		)
 		args = parser.parse_args()
-		email = validate.validate_email(args['email'])
-		password = validate.validate_password(args['password'])
+		email = args['email']
+		password = args['password']
+		user = usr
 
 
 class GiveAdminRights(Resource):
@@ -103,7 +105,7 @@ class GiveAdminRights(Resource):
 			help="Please provide an email address for an update to occur"
 		)
 		args = parser.parse_args()
-		email = validate.validate_email(args['email'])
+		email = args['email']
 
 
 
