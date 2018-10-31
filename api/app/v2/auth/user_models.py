@@ -17,32 +17,43 @@ class Authentication():
 
     def create_user(self, data):
         """Create a user."""
-        self.cursor.execute(
+        connection = psycopg2.connect(os.getenv("DATABASE_URL"))
+        cursor = connection.cursor()
+
+        try:
+            cursor.execute(
             """
-            INSERT INTO users (user_name, email, password, is_admin)
-            VALUES ('%s', '%s', '%s', '%s') RETURNING user_id
+            INSERT INTO users (user_name, email, password)
+            VALUES ('%s', '%s', '%s');
             """
-            % (data['user_name'], data['email'], data['password'], data['is_admin'])
+            % (data[0], data[1], data[2])
         )
-        user_id = self.cursor.fetchone()
-        self.connection.commit()
-        return user_id
+            connection.commit()
+
+        except:
+            return "Failed"
+        return {'message': "You have successfully registered"}
 
     def fetch_email(self, data):
         """Login user."""
-        self.cursor.execute("SELECT * FROM users WHERE email='%s'"
-            % (data['email'])
-        )
-        result = self.cursor.fetchone()
+        connection = psycopg2.connect(os.getenv("DATABASE_URL"))
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM users WHERE email= '{}'".format(data))
+        connection.commit()
+        result = cursor.fetchall()
+
         if not result:
             return ({"status": "Email was not found"}), 404
-        if result[3] == data['password']:
+        return result
+        if result[2] == data['password']:
             return result[0]
         else:
             raise BadRequest("Password does not match")
 
     def get_user_by_id(self, user_id):
         """Fetch a specific user by id."""
+        self.connection = psycopg2.connect(os.getenv("DATABASE_URL"))
+        self.cursor = connection.cursor()
         self.cursor.execute("SELECT * FROM users WHERE user_id='%s'"
             % (user_id)
         )
@@ -51,6 +62,9 @@ class Authentication():
 
     def is_admin_present(self):
         """Check is an admin is present."""
+        self.connection = psycopg2.connect(os.getenv("DATABASE_URL"))
+        self.cursor = connection.cursor()
+
         self.cursor.execute("SELECT * FROM users WHERE is_admin=True"
         )
         result = self.cursor.fetchone()
@@ -58,10 +72,15 @@ class Authentication():
 
     def give_admin_rights(self, email):
         """Give admin rights to a normal user."""
+        self.connection = psycopg2.connect(os.getenv("DATABASE_URL"))
+        self.cursor = connection.cursor()
         self.cursor.execute(
-            """UPDATE users SET is_admin=True WHERE email='%s'
+            """
+            UPDATE users SET is_admin=True WHERE email='%s'
             """
             % (email)
         )
         self.connection.commit()
         return email
+
+

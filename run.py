@@ -6,4 +6,4 @@ config = os.getenv('APP_SETTINGS')  # development cofiguration
 app = app_create(config)
 
 if __name__ == '__main__':
-    app.run(port=7777)
+    app.run()

@@ -1,16 +1,17 @@
 from flask_restful import Resource, reqparse
+from flask_jwt_extended import jwt_required
 from werkzeug.exceptions import BadRequest, NotFound, Unauthorized
 
 import re
 
 # local imports
-from api.app.v2.store.model import StoreDb
+from api.app.v2.store.model import StoreModel
 
-db_model = StoreDb()
+db_model = StoreModel()
 
 class StoreProducts(Resource):
 	"""Store products class."""
-	@auth_required
+	@jwt_required
 	def post(self):
 		"""Add a product to the store."""
 		parser = reqparse.RequestParser()
@@ -37,6 +38,7 @@ class StoreProducts(Resource):
 		args = parser.parse_args()
 		product_name = db_model.get_one_product(args['product_name'])
 		category_name = db_model.get_one_category(args['category_name'])
+		return {'message': "Product has been added successfuly"}, 201
 
 	def get(self):
 		"""Fetch all products."""
@@ -47,7 +49,6 @@ class StoreProducts(Resource):
 			all_products = {}
 			for p in products:
 				all_products.append(product)
-
 
 	def put(self, id):
 		"""Modify a product."""
@@ -70,3 +71,19 @@ class StoreProducts(Resource):
 		else:
 			return {"message": "Product was not found"}, 404
 
+
+class StoreCategories(Resource):
+	"""The store categories class."""
+
+	@jwt_required
+	def post(self):
+		"""Add a category to the store."""
+		parser = reqparse.RequestParser()
+		parser.add_argument('category_name',
+			type=str,
+			required=True,
+			help="Category name cannot be left blank!"
+		)
+		args = parser.parse_args()
+		category_name = db_model.get_one_category(args['category_name'])
+		return {'message': "Product has been added successfuly"}, 201

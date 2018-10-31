@@ -18,7 +18,7 @@ CREATE TABLE category (
 products = """
 CREATE TABLE products (
     product_id SERIAL PRIMARY KEY,
-    product_name VARCHAR(255) NOT NULL UNIQUE,
+    product_name VARCHAR(255) UNIQUE NOT NULL,
     stock INTEGER NOT NULL,
     price INTEGER NOT NULL,
     category_name VARCHAR(255) NOT NULL,
@@ -29,13 +29,17 @@ CREATE TABLE products (
 sales = """
 CREATE TABLE sales (
     sale_id SERIAL PRIMARY KEY,
-    product_name VARCHAR(255) NOT NULL,
+    product_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
     price INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
-    FOREIGN KEY (product_name) REFERENCES products (product_name),
+    FOREIGN KEY (product_id) REFERENCES products (product_id),
     FOREIGN KEY (user_id) REFERENCES users (user_id) 
 )
 """
 
-queries = [users, category, products, sales]
+admin = """
+INSERT INTO users (user_name, email, password, is_admin) VALUES ('Admin', 'admin@store.com', 'sadmin', True) 
+"""
+
+queries = [users, category, products, sales, admin]

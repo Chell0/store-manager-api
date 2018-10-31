@@ -2,16 +2,16 @@ from flask_restful import Resource, reqparse
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 
 # local imports
-from api.app.v2.security.validate import Validate
-from api.app.v2.auth.user_models import Authentication
-validate = Validate()
-usr = Authentication()
+from api.app.v2.security.validate import Validate as validate
+from api.app.v2.auth.user_models import Authentication as usr
+
 
 
 class UserRegistration(Resource):
 	"""User registration class."""
 
 	def post(self):
+
 		parser = reqparse.RequestParser()
 		parser.add_argument('user_name',
 			type=str,
@@ -29,8 +29,11 @@ class UserRegistration(Resource):
 			help="Password cannot be left blank!"
 		)
 		args = parser.parse_args()
+		username = args['user_name']
 		email = args['email']
 		password = args['password']
+		data = [username, email, password]
+		return usr.create_user(self, data)
 		user = usr.fetch_email(email)
 		return (
 			{
@@ -56,16 +59,14 @@ class UserLogin(Resource):
 		args=parser.parse_args()
 		email = args['email']
 		password = args['password']
-		user = usr.fetch_email(email)
-		print(user)
-		if password == user[3]:
-			details = [user[0], user[4]]
+		user = usr.fetch_email(self, email)
+		if password == user[0][3]:
+			details = [user[0][0], user[0][1], user[0][4]]
 			access_token = create_access_token(identity = details)
-			return access_token
+			return access_token, 200
 		return {
 			"message": "Error password does not match"
 		}, 400
-
 
 
 class CreateAttendantAccount(Resource):
@@ -91,7 +92,8 @@ class CreateAttendantAccount(Resource):
 		args = parser.parse_args()
 		email = args['email']
 		password = args['password']
-		user = usr
+		user = usr.create_user(self, user_name, email, password)
+		return {'message': 'User successfully created'}
 
 
 class GiveAdminRights(Resource):

@@ -57,10 +57,10 @@ class StoreModel(StoreDb):
         """Add a product."""
         self.cursor.execute(
             """
-            INSERT INTO products (product_name, stock, price, category_name)
+            INSERT INTO products (product_name, stock, price, category_id)
             VALUES ('%s', '%s', '%s', '%s')
             """
-            % (data['product_name'], data['stock'], data['price'], data['category_name'])
+            % (data['product_name'], data['stock'], data['price'], data['category_id'])
         )
         self.store()
 
@@ -77,7 +77,10 @@ class StoreModel(StoreDb):
     # Fetch one product
     def get_one_product(self, id):
         """Fetch a product by id from the db."""
-        self.cursor.execute("SELECT * FROM products WHERE product_id='%s'"
+        self.cursor.execute(
+            """
+            SELECT * FROM products WHERE product_id=%s
+            """
             % (id)
         )
         product = self.cursor.fetchone()

@@ -2,7 +2,7 @@ import os
 import psycopg2
 
 # local imports
-from table import queries  
+from table import queries
 
 class Connect(object):
     """Connect class."""
@@ -14,11 +14,11 @@ class Connect(object):
     def create_tables(self):
         """Create tables."""
         i = 0
-        for x in queries:
+        for i in queries:
             try:
                 connection = psycopg2.connect(os.getenv("DATABASE_URL"))
                 cursor = connection.cursor()
-                cursor.execute(x)
+                cursor.execute(i)
                 connection.commit()
                 cursor.close()
             except Exception as e:
