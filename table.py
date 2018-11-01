@@ -19,10 +19,10 @@ products = """
 CREATE TABLE products (
     product_id SERIAL PRIMARY KEY,
     product_name VARCHAR(255) UNIQUE NOT NULL,
-    stock INTEGER NOT NULL,
+    stock_quantity INTEGER NOT NULL,
     price INTEGER NOT NULL,
     category_name VARCHAR(255) NOT NULL,
-    FOREIGN KEY (category_name) REFERENCES category (category_name) 
+    FOREIGN KEY (category_id) REFERENCES category (category_id) 
 )
 """
 

@@ -9,7 +9,7 @@ from flask_jwt_extended import JWTManager
 from instance.config import app_settings
 from api.app.v1.views import OneProduct, ProductList, SaleList, SaleRecord
 from api.app.v2.auth.user_views import UserRegistration, UserLogin, CreateAttendantAccount, GiveAdminRights
-from api.app.v2.store.views import StoreProducts
+from api.app.v2.store.views import StoreProducts, OneStoreProduct OneCategory, StoreCategories
 
 def app_create(config_app):               
     app = Flask(__name__, instance_path="/instance")
@@ -36,5 +36,10 @@ def app_create(config_app):
     api.add_resource(GiveAdminRights, '/v2/auth/users/<int:id>')
     # This will process a POST request to add a product
     api.add_resource(StoreProducts, '/v2/products')
+    api.add_resource(OneStoreProduct, '/v2/products/<int:id>')
+    # This will process a POST request to create a category
+    api.add_resource(StoreCategories, '/v2/categories')
+    # This will process a GET request to get a category by id
+    api.add_resource(OneCategory, '/v2/categories/<int:id>')
 
     return app

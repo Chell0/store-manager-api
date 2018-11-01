@@ -22,12 +22,12 @@ class Authentication():
 
         try:
             cursor.execute(
-            """
-            INSERT INTO users (user_name, email, password)
-            VALUES ('%s', '%s', '%s');
-            """
-            % (data[0], data[1], data[2])
-        )
+                """
+                INSERT INTO users (user_name, email, password)
+                VALUES ('%s', '%s', '%s');
+                """
+                % (data[0], data[1], data[2])
+            )
             connection.commit()
 
         except:

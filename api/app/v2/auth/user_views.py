@@ -34,7 +34,7 @@ class UserRegistration(Resource):
 		password = args['password']
 		data = [username, email, password]
 		return usr.create_user(self, data)
-		user = usr.fetch_email(email)
+		
 		return (
 			{
 			"status": "success",
