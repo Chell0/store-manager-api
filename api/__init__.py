@@ -9,7 +9,7 @@ from flask_jwt_extended import JWTManager
 from instance.config import app_settings
 from api.app.v1.views import OneProduct, ProductList, SaleList, SaleRecord
 from api.app.v2.auth.user_views import UserRegistration, UserLogin, CreateAttendantAccount, GiveAdminRights
-from api.app.v2.store.views import StoreProducts, OneStoreProduct OneCategory, StoreCategories
+from api.app.v2.store.views import StoreProducts, OneStoreProduct, OneCategory, StoreCategories
 
 def app_create(config_app):               
     app = Flask(__name__, instance_path="/instance")

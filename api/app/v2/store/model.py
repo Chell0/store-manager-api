@@ -1,3 +1,4 @@
+import os
 import psycopg2
 
 from api.app.v2.db import StoreDb
@@ -13,7 +14,7 @@ class StoreModel(StoreDb):
     def __init__(self):
         super().__init()
 
-    Add a category
+    # Add a category
     def add_category(self, category_name):
         """Add a category."""
         connection = psycopg2.connect(os.getenv("DATABASE_URL"))
@@ -57,6 +58,8 @@ class StoreModel(StoreDb):
             % (id)
         )
         category = cursor.fetchone()
+        if not category:
+            return {'message': "Sorry category was not found"}, 404
         return category
 
     # Delete a category
@@ -66,12 +69,22 @@ class StoreModel(StoreDb):
         """Delete a category by id."""
         cursor.execute(
             """
-            DELETE FROM category WHERE category_id='%s'
-            """
+            SELECT * FROM category WHERE category_id='%s'
+            """ 
             % (category_id)
         )
-        connection.commit()
-        return {'message': "Category successfuly deleted"}, 200
+        category_res = cursor.fetchone()
+        if not category_res:
+            return {"message": "Sorry, category {} was not found".format(category_id)}, 404
+        else:           
+            cursor.execute(
+                """
+                DELETE FROM category WHERE category_id='%s'
+                """
+                % (category_id)
+            )
+            connection.commit()
+            return {'message': "Category deleted successfuly "}, 200
 
 ################# PRODUCT SECTION #####################
 
@@ -80,15 +93,24 @@ class StoreModel(StoreDb):
         """Add a product."""
         connection = psycopg2.connect(os.getenv("DATABASE_URL"))
         cursor = connection.cursor()
-        cursor.execute(
+        cursor.execute("""
+            SELECT * FROM products WHERE product_name='%s'
             """
-            INSERT INTO products (product_name, stock_quantity, price, category_id)
-            VALUES ('%s', '%s', '%s', '%s')
-            """
-            % (data[0], data[1], data[2], data[3])
+             % (product_name)
         )
-        connection.commit()
-        return data
+        add_product = cursor.fetchone()
+        if add_product:
+            return {"message": "Sorry, {} already exists".format(product_name)}, 409
+        else:
+            cursor.execute(
+                """
+                INSERT INTO products (product_name, stock_quantity, price, category_id)
+                VALUES ('%s', '%s', '%s', '%s')
+                """
+                % (data[0], data[1], data[2], data[3])
+            )
+            connection.commit()
+            return data
 
     # Fetch all products
     def get_all_products(self):
@@ -110,7 +132,9 @@ class StoreModel(StoreDb):
             """
             % (id)
         )
-        product_id = cursor.fetchone()
+        product = cursor.fetchone()
+        if not product:
+            return {'message': "Product is not found"}, 404
         return product
 
     def get_product_by_name(self, product_name):
@@ -128,19 +152,28 @@ class StoreModel(StoreDb):
 
 
     # Update a product
-    def modify_a_product(self, stock_quantity):
+    def modify_a_product(self, product_id):
         """Modify a product."""
         connection = psycopg2.connect(os.getenv("DATABASE_URL"))
         cursor = connection.cursor()
         cursor.execute(
             """
-            UPDATE products SET stock_quantity='%s' WHERE product_id='%s'
-            """
-            % (stock_quantity, id)
+            SELECT * FROM products WHERE product_id='%s'
+            """ 
+            % (product_id)
         )
-        product = cursor.update()
-        connection.commit()
-        return product
+        one_product = cursor.fetchone()
+        if not one_product:
+            return {"message": "Sorry, product {} was not found".format(product_id)}, 404
+        else:
+            cursor.execute(
+                """
+                UPDATE products SET product_name=%s, stock_quantity=%s, price=%s WHERE product_id=%s
+                """
+                % (product_name, stock_quantity, price, product_id)
+            )
+            connection.commit()
+            return product_id
 
     # Delete a product
     def delete_a_product(self, product_id):
@@ -149,12 +182,22 @@ class StoreModel(StoreDb):
         cursor = connection.cursor()
         cursor.execute(
             """
-            DELETE from products WHERE product_id='%s'
-            """
-            % (product_id)
+            SELECT * FROM category WHERE product_id='%s'
+            """ 
+            % (category_id)
         )
-        connection.commit()
-        return product_id
+        category_res = cursor.fetchone()
+        if not category_res:
+            return {"message": "Sorry, category {} was not found".format(category_id)}, 404
+        else:
+            cursor.execute(
+                """
+                DELETE FROM products WHERE product_id='%s'
+                """
+                % (product_id)
+            )
+            connection.commit()
+            return {'message': "Product deleted successfuly"}, 200
 
 ###################### SALES SECTION ##########################
 
@@ -187,7 +230,10 @@ class StoreModel(StoreDb):
         """Fetch a sale order by id."""
         connection = psycopg2.connect(os.getenv("DATABASE_URL"))
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM sales WHERE sale_id='%s'"
+        cursor.execute(
+            """
+            SELECT * FROM sales WHERE sale_id='%s'
+            """
             % (id)
         )
         sale_order = cursor.fetchone()

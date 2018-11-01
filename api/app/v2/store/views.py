@@ -39,6 +39,8 @@ class StoreProducts(Resource):
 		)
 		args = parser.parse_args()
 		product_name = args['product_name']
+		stock_quantity = args['stock_quantity']
+		price = args['price']
 		category_id = args['category_id']
 		data = [product_name, stock_quantity, price, category_id]
 		return db_model.add_category(self, data)
@@ -52,6 +54,7 @@ class StoreProducts(Resource):
 		products = db_model.get_all_products()
 		if len(products) == 0:
 			return {"message": "Sorry, there are no products"}, 200
+		return products
 
 	def put(self, stock_quantity):
 		"""Modify a product."""
